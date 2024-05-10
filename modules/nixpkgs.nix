@@ -51,7 +51,7 @@ in {
         system = builderSystem;
       };
     in
-      pkgs.llvmPackages_15;
+      pkgs.llvmPackages_latest;
     targetSystem = lib.systems.elaborate {system = cfg.system;};
   in {
     _module.args = {
