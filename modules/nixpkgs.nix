@@ -40,6 +40,7 @@ in {
           check = x: builtins.typeOf x == "set" && !(x ? "system") && !(x ? "parsed");
         };
         description = "Additional arguments to nixpkgs.crossSystem. Should NOT define system or parsed options.";
+        default = {};
       };
     };
   };
@@ -50,11 +51,49 @@ in {
         system = builderSystem;
       };
     in
-      pkgs.llvmPackages_latest;
+      pkgs.llvmPackages_15;
     targetSystem = lib.systems.elaborate {system = cfg.system;};
   in {
     _module.args = {
       pkgs = import thirdparty.nixpkgs {
+        overlays = [
+          (import thirdparty.rust-overlay)
+          (final: prev: {
+            mth = prev.lib.makeScope prev.newScope (self: {
+              rustToolchain = prev.rust-bin.nightly.latest.default.override {
+                extensions = ["rust-src"];
+                targets =
+                  []
+                  ++ {
+                    "x86_64" = [
+                      "x86_64-unknown-uefi"
+                    ];
+                    "aarch64" = [];
+                  }
+                  .${targetSystem.rust.platform.arch};
+              };
+              rustTools = {
+                crate2nix = thirdparty.crate2nix;
+                fixSymlinks = src: symlinks:
+                  prev.runCommand "fix-symlinks" {inherit src;} ''
+                    cp -r $src/* .
+                    ${lib.concatStrings (lib.attrsets.mapAttrsToList (symlink: destination: "rm -rf ./${symlink}\ncp ${destination} ./${symlink} -r -v\n") symlinks)}
+                    mkdir $out
+                    cp -r ./* $out/
+                  '';
+              };
+              hello = self.callPackage ../pkgs/hello {};
+
+              helloCpp = prev.stdenv.mkDerivation {
+                phases = ["build"];
+                name = "test";
+                build = ''
+                  echo "#include <iostream>" | clang++  -xc++ -E - > $out
+                '';
+              };
+            });
+          })
+        ];
         localSystem = builderSystem;
         crossSystem =
           {
@@ -62,6 +101,7 @@ in {
               makeMuslParsedPlatform targetSystem.parsed;
             useLLVM = true;
             linker = "lld";
+            cc = llvmToolchain.libcxxClang;
             linux-kernel = let
               noBintools = {
                 bootBintools = null;

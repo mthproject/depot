@@ -1,4 +1,4 @@
-thirdparty @ {nixpkgs, ...}: let
+{builderSystem}: thirdparty @ {nixpkgs, ...}: let
   lib = nixpkgs.lib;
 
   platforms =
@@ -8,14 +8,12 @@ in
     platformName: _:
       lib.evalModules {
         specialArgs = {
-          inherit thirdparty;
-          builderSystem = "x86_64-linux";
+          inherit thirdparty builderSystem;
         };
         modules = [
           ../modules/nixpkgs.nix
           ../modules/kernel.nix
           ../modules/initramfs.nix
-          ../modules/unifiedimage.nix
           ./${platformName}/default.nix
         ];
       }
