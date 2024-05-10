@@ -1,0 +1,5 @@
+result*
+dev
+.direnv
+target
+**/fuzz/out/
