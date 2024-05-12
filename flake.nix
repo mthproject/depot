@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "path:./nixpkgs";
 
     # Rust
     rust-overlay.url = "github:oxalica/rust-overlay";

@@ -59,6 +59,18 @@ in {
         overlays = [
           (import thirdparty.rust-overlay)
           (final: prev: {
+  rust_1_77 = callPackage ../development/compilers/rust/1_77.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_17 = llvmPackages_17.libllvm;
+  };
+  rust = rust_1_77;
+
+            rustc = prev.rustc.overrideAttrs (old: {
+                NIX_LDFLAGS = toString ("--push-state --as-needed -lc++ --pop-state");
+                # configureFlags = (builtins.trace old old) ++ [
+                #   "--enable-system-llvm-libunwind"
+                # ];
+            });
             mth = prev.lib.makeScope prev.newScope (self: {
               rustToolchain = prev.rust-bin.nightly.latest.default.override {
                 extensions = ["rust-src"];
@@ -88,7 +100,7 @@ in {
                 phases = ["build"];
                 name = "test";
                 build = ''
-                  echo "#include <iostream>" | clang++  -xc++ -E - > $out
+                  echo "#include <iostream>${"\n"} int main() { std::cout << \"Hello World!\"; return 0; }" | $CXX -xc++ - -o $out
                 '';
               };
             });
@@ -101,7 +113,7 @@ in {
               makeMuslParsedPlatform targetSystem.parsed;
             useLLVM = true;
             linker = "lld";
-            cc = llvmToolchain.libcxxClang;
+            cc = llvmToolchain.clangUseLLVM;
             linux-kernel = let
               noBintools = {
                 bootBintools = null;
