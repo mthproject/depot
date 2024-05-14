@@ -271,16 +271,16 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1715266358,
-        "narHash": "sha256-doPgfj+7FFe9rfzWo1siAV2mVCasW+Bh8I1cToAXEE4=",
-        "owner": "NixOS",
+        "lastModified": 1715606358,
+        "narHash": "sha256-5cxyYV0hTp7r40OidTJhO0vUDfMtsSyk4lKZpinA/YM=",
+        "owner": "mthproject",
         "repo": "nixpkgs",
-        "rev": "f1010e0469db743d14519a1efd37e23f8513d714",
+        "rev": "d3d44de2ec414a90fc170fce7517d4dfd1179349",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "mthproject",
+        "ref": "rustc-libcxx",
         "repo": "nixpkgs",
         "type": "github"
       }

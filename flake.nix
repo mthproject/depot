@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "path:./nixpkgs";
+    nixpkgs.url = "github:mthproject/nixpkgs/rustc-libcxx";
 
     # Rust
     rust-overlay.url = "github:oxalica/rust-overlay";
@@ -31,7 +31,7 @@
     in {
       default = pkgs.mkShell {
         buildInputs = [
-          pkgs.mth.rustToolchain
+          #pkgs.mth.rustToolchain
           pkgs.just
           pkgs.nix-output-monitor
           pkgs.cargo-fuzz
