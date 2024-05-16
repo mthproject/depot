@@ -91,9 +91,12 @@ in {
           {
             parsed =
               makeMuslParsedPlatform targetSystem.parsed;
-            useLLVM = true;
-            linker = "lld";
-            cc = llvmToolchain.clangUseLLVM;
+            
+            # we can't use llvm because of https://github.com/NixOS/nixpkgs/issues/311930
+            #useLLVM = true;
+            #linker = "lld";
+            #cc = llvmToolchain.clangUseLLVM;
+            
             linux-kernel = let
               noBintools = {
                 bootBintools = null;
