@@ -10,4 +10,4 @@
     };
   };
 in
-  callPackage generated {}
+  (callPackage generated {})

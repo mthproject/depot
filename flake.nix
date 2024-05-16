@@ -28,9 +28,15 @@
 
     devShells = lib.genAttrs systems (system: let
       pkgs = (getDevPkgsFor system).pkgsBuildBuild;
+      rustPkgs = pkgs.rust.packages.stable;
     in {
       default = pkgs.mkShell {
+        RUST_SRC_PATH = "${rustPkgs.rustPlatform.rustLibSrc}";
         buildInputs = [
+          rustPkgs.cargo
+          rustPkgs.clippy
+          rustPkgs.rustfmt
+          rustPkgs.rustc
           #pkgs.mth.rustToolchain
           pkgs.just
           pkgs.nix-output-monitor
