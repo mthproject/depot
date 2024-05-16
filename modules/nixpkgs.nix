@@ -40,6 +40,7 @@ in {
           check = x: builtins.typeOf x == "set" && !(x ? "system") && !(x ? "parsed");
         };
         description = "Additional arguments to nixpkgs.crossSystem. Should NOT define system or parsed options.";
+        default = {};
       };
     };
   };
@@ -55,13 +56,36 @@ in {
   in {
     _module.args = {
       pkgs = import thirdparty.nixpkgs {
+        overlays = [
+          (import thirdparty.rust-overlay)
+          (final: prev: {
+            mth = prev.lib.makeScope prev.newScope (self: {
+              rustTools = rec {
+                crate2nix = thirdparty.crate2nix;
+                fixSymlinks = src: symlinks:
+                  prev.runCommand "fix-symlinks" {inherit src;} ''
+                    cp -r $src/* .
+                    ${lib.concatStrings (lib.attrsets.mapAttrsToList (symlink: destination: "rm -rf ./${symlink}\ncp ${destination} ./${symlink} -r -v\n") symlinks)}
+                    mkdir $out
+                    cp -r ./* $out/
+                  '';
+                wrapRustCrate = crate2nix.tools.${prev.system}.generatedCargoNix;
+              };
+              hello = self.callPackage ../pkgs/hello {};
+            });
+          })
+        ];
         localSystem = builderSystem;
         crossSystem =
           {
             parsed =
               makeMuslParsedPlatform targetSystem.parsed;
-            useLLVM = true;
-            linker = "lld";
+            
+            # we can't use llvm because of https://github.com/NixOS/nixpkgs/issues/311930
+            #useLLVM = true;
+            #linker = "lld";
+            #cc = llvmToolchain.clangUseLLVM;
+            
             linux-kernel = let
               noBintools = {
                 bootBintools = null;

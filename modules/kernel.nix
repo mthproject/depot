@@ -51,7 +51,7 @@ in {
   };
 
   config = {
-    # nix develop .#platforms.x64-efi.config.mth.dev.kernel.kernelWithMenuConfig
+    # nix develop .#x64-efi.config.mth.dev.kernel.kernelWithMenuConfig
     mth.dev.kernel.kernelWithMenuConfig = cfg.packages.kernel.overrideAttrs (old:
       with pkgs.pkgsBuildHost; {
         nativeBuildInputs = old.nativeBuildInputs ++ [pkg-config ncurses];

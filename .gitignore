@@ -1,5 +1,5 @@
 result*
-dev
+/dev
 .direnv
 target
 **/fuzz/out/
