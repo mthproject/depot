@@ -83,14 +83,6 @@ in {
                   '';
               };
               hello = self.callPackage ../pkgs/hello {};
-
-              helloCpp = prev.stdenv.mkDerivation {
-                phases = ["build"];
-                name = "test";
-                build = ''
-                  echo "#include <iostream>${"\n"}#include <stdexcept>${"\n"} int main() { std::cout << \"Hello World!\"; throw std::invalid_argument(\"unwind test\"); return 0; }" | $CXX -xc++ - -v -o $out
-                '';
-              };
             });
           })
         ];
