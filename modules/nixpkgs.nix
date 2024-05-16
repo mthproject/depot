@@ -60,19 +60,7 @@ in {
           (import thirdparty.rust-overlay)
           (final: prev: {
             mth = prev.lib.makeScope prev.newScope (self: {
-              rustToolchain = prev.rust-bin.nightly.latest.default.override {
-                extensions = ["rust-src"];
-                targets =
-                  []
-                  ++ {
-                    "x86_64" = [
-                      "x86_64-unknown-uefi"
-                    ];
-                    "aarch64" = [];
-                  }
-                  .${targetSystem.rust.platform.arch};
-              };
-              rustTools = {
+              rustTools = rec {
                 crate2nix = thirdparty.crate2nix;
                 fixSymlinks = src: symlinks:
                   prev.runCommand "fix-symlinks" {inherit src;} ''
@@ -81,6 +69,7 @@ in {
                     mkdir $out
                     cp -r ./* $out/
                   '';
+                wrapRustCrate = crate2nix.tools.${prev.system}.generatedCargoNix;
               };
               hello = self.callPackage ../pkgs/hello {};
             });
