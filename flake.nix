@@ -40,8 +40,6 @@
           #pkgs.mth.rustToolchain
           pkgs.just
           pkgs.nix-output-monitor
-          pkgs.cargo-fuzz
-          pkgs.aflplusplus
         ];
       };
     });
