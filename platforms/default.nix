@@ -14,6 +14,10 @@ in
           ../modules/nixpkgs.nix
           ../modules/kernel.nix
           ../modules/initramfs.nix
+          ../modules/vendor.nix
+          {
+            mth.platform.name = platformName;
+          }
           ./${platformName}/default.nix
         ];
       }

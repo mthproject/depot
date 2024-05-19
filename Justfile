@@ -1,5 +1,9 @@
 build-kernel PLATFORM:
     nix build .#{{ PLATFORM }}.config.mth.kernel.packages.kernel --log-format internal-json -v |& nom --json
+reconfigure-kernel PLATFORM:
+    nix run .#{{ PLATFORM }}.config.mth.dev.kernel.reconfigureKernel --show-trace -L
+reconfigure-kernel-from-scratch PLATFORM:
+    nix run .#{{ PLATFORM }}.config.mth.dev.kernel.reconfigureKernelFromScratch --show-trace -L
 build-initramfs PLATFORM:
     nix build .#{{ PLATFORM }}.config.mth.initramfs.final --log-format internal-json -v |& nom --json
 build-mth-package PLATFORM PACKAGE:

@@ -6,15 +6,16 @@
       # gcc.tune = "skylake";
     };
   };
+  
+  imports = [ ./kernel.nix ];
 
-  mth.kernel.config = with lib.kernel; {
-    EXPERT = yes;
-    BLOCK = yes;
-    NET_9P = no;
+  # mth.kernel.config = with lib.kernel; {
+  #   EXPERT = yes;
+  #   BLOCK = yes;
+  #   NET_9P = no;
 
-    # hardening
-    CFI_CLANG = yes;
-    LTO_NONE = no;
-    LTO_CLANG_THIN = yes;
-  };
+  #   # hardening
+  #   CFI_CLANG = yes;
+  #   #CONFIG_LTO_CLANG_THIN = yes;
+  # };
 }
