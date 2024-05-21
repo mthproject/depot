@@ -8,14 +8,4 @@
   };
   
   imports = [ ./kernel.nix ];
-
-  # mth.kernel.config = with lib.kernel; {
-  #   EXPERT = yes;
-  #   BLOCK = yes;
-  #   NET_9P = no;
-
-  #   # hardening
-  #   CFI_CLANG = yes;
-  #   #CONFIG_LTO_CLANG_THIN = yes;
-  # };
 }

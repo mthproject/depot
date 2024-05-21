@@ -24,7 +24,6 @@
     in
       pkgs;
   in {
-    generateKernelNix = import ./kernel.nix;
     legacyPackages = lib.genAttrs systems (system: platformsBuiltBy system);
 
     devShells = lib.genAttrs systems (system: let
