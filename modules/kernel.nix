@@ -98,7 +98,7 @@ in {
           export TMPDIR=$(${pkgs.pkgsBuildBuild.mktemp}/bin/mktemp -d)
           export USER_PWD=$(pwd)
           cp -r ${linuxBuildEnv}/linux-* $TMPDIR/linux
-          chmod -R 777 $TMPDIR
+          chmod -R 760 $TMPDIR -v
           cd $TMPDIR/linux
           export KCONFIG_CONFIG="$TMPDIR/.config-${config.mth.platform.name}"
           ${makePart}
