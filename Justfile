@@ -1,5 +1,5 @@
 build-kernel PLATFORM:
-    nix build .#{{ PLATFORM }}.config.mth.kernel.packages.kernel --log-format internal-json -v |& nom --json
+    nix build .#{{ PLATFORM }}.config.mth.kernel.build --log-format internal-json -v |& nom --json
 reconfigure-kernel PLATFORM:
     nix run .#{{ PLATFORM }}.config.mth.dev.kernel.reconfigureKernel --show-trace -L
 reconfigure-kernel-from-scratch PLATFORM:
